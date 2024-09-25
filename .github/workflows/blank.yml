@@ -1,0 +1,28 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        run: |
+          docker pull passbolt/passbolt:latest-ce
+          docker pull mariadb:10.11
+
+      - name: Start Passbolt
+        run: |
+          docker-compose up -d
+
+      - name: Retrieve secrets from Passbolt
+        run: |
+          docker exec -t passbolt /path/to/cli/command to fetch secret
+          echo "Secrets retrieved successfully"
